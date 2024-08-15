@@ -1,6 +1,7 @@
+const { where } = require("sequelize");
 const signupCredentials = require("../model/userCredentials");
 
-exports.postCredentials = (req, res) => {
+exports.postSignupCredentials = (req, res) => {
   const { userName, password, email } = req.body;
   signupCredentials
     .findOne({
@@ -16,6 +17,40 @@ exports.postCredentials = (req, res) => {
           email: email,
         });
         res.status(201).send(response);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.postLoginCredentials = (req, res) => {
+  const { email, password } = req.body;
+  signupCredentials
+    .findOne({
+      where: { email: email },
+    })
+    .then((result) => {
+      if (result) {
+        signupCredentials
+          .findOne({
+            where: { password: password },
+          })
+          .then((result) => {
+            if (result) {
+              res.status(201).send(result);
+            } else {
+              res.status(401).send({
+                body: result,
+                message: "User not authorized",
+              });
+            }
+          });
+      } else {
+        res.status(404).send({
+          body: result,
+          message: "User not found",
+        });
       }
     })
     .catch((err) => {
