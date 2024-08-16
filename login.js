@@ -21,6 +21,7 @@ login.addEventListener("submit", async (event) => {
       ul.innerHTML = "";
       console.log("loged in  successful:", data);
       alert("loged in succesfully");
+      window.location.href = "/expenseTracker.html";
     } else {
       console.log("login failed:", data.message);
       const ul = document.querySelector(".errorList");

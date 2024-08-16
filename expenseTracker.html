@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="expenseForm">
+      <label for="amount">Choose Expense Amount:</label>
+      <input type="text" name="amount" id="amount" />
+      <label for="amount">Choose description</label>
+      <input type="text" name="description" id="description" />
+      <label for="category">Choose a category:</label>
+      <select name="category" id="category">
+        <option value="fuel">Fuel</option>
+        <option value="food">Food</option>
+        <option value="electricity">Electricity</option>
+        <option value="movie">Movie</option>
+      </select>
+      <button type="submit">Add Expense</button>
+    </form>
+    <ul class="ulist"></ul>
+  </body>
+  <script src="./expenseTracker.js"></script>
+</html>
