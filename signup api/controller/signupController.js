@@ -1,4 +1,4 @@
-const { where } = require("sequelize");
+const bcrypt = require("bcrypt");
 const signupCredentials = require("../model/userCredentials");
 
 exports.postSignupCredentials = (req, res) => {
@@ -11,12 +11,14 @@ exports.postSignupCredentials = (req, res) => {
       if (result) {
         res.status(400).send({ message: "Email already exists" });
       } else {
-        const response = signupCredentials.create({
-          user_Name: userName,
-          password: password,
-          email: email,
+        bcrypt.hash(password, 10, (err, hash) => {
+          const response = signupCredentials.create({
+            user_Name: userName,
+            password: hash,
+            email: email,
+          });
+          res.status(201).send(response);
         });
-        res.status(201).send(response);
       }
     })
     .catch((err) => {
@@ -32,20 +34,19 @@ exports.postLoginCredentials = (req, res) => {
     })
     .then((result) => {
       if (result) {
-        signupCredentials
-          .findOne({
-            where: { password: password },
-          })
-          .then((result) => {
-            if (result) {
-              res.status(201).send(result);
-            } else {
-              res.status(401).send({
-                body: result,
-                message: "User not authorized",
-              });
-            }
-          });
+        bcrypt.compare(password, result.password, (err, result) => {
+          if (err) {
+            throw new Error("somthing went wrong");
+          }
+          if (result) {
+            res.status(201).send(result);
+          } else {
+            res.status(404).send({
+              body: result,
+              message: "User not authorized",
+            });
+          }
+        });
       } else {
         res.status(404).send({
           body: result,
