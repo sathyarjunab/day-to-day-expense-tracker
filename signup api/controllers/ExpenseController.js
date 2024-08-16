@@ -1,7 +1,8 @@
-const db = require("../model/expense");
+const expense = require("../model/expense");
 
 exports.getData = (req, res) => {
-  db.findAll()
+  req.user
+    .getExpenses()
     .then((result) => {
       res.status(200).send(result);
     })
@@ -11,11 +12,12 @@ exports.getData = (req, res) => {
 };
 
 exports.postData = (req, res) => {
-  db.create({
-    amount: req.body.amount,
-    description: req.body.description,
-    category: req.body.category,
-  })
+  req.user
+    .createExpense({
+      amount: req.body.amount,
+      description: req.body.description,
+      category: req.body.category,
+    })
     .then((result) => {
       res.status(201).send(result);
     })
@@ -26,7 +28,8 @@ exports.postData = (req, res) => {
 
 exports.getById = (req, res) => {
   const id = req.params.id;
-  db.findByPk(id)
+  expense
+    .findByPk(id)
     .then((result) => {
       res.status(200).send(result);
     })
@@ -37,7 +40,8 @@ exports.getById = (req, res) => {
 
 exports.updateById = (req, res) => {
   const id = req.params.id;
-  db.findByPk(id)
+  expense
+    .findByPk(id)
     .then((result) => {
       result.amount = req.body.amount;
       result.description = req.body.description;
@@ -55,7 +59,8 @@ exports.updateById = (req, res) => {
 
 exports.deleteById = (req, res) => {
   const id = req.params.id;
-  db.findByPk(id)
+  expense
+    .findByPk(id)
     .then((res) => {
       res.destroy();
     })

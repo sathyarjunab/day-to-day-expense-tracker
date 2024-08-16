@@ -20,6 +20,7 @@ login.addEventListener("submit", async (event) => {
       const ul = document.querySelector(".errorList");
       ul.innerHTML = "";
       console.log("loged in  successful:", data);
+      localStorage.setItem("token", data.token);
       alert("loged in succesfully");
       window.location.href = "/expenseTracker.html";
     } else {

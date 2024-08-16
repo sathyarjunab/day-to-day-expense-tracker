@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
-const signupCredentials = require("../model/UserCredentials");
 
+const tokenGenrator = require("../util/token");
+const signupCredentials = require("../model/UserCredentials");
+const token = require("../util/token");
 exports.postSignupCredentials = (req, res) => {
   const { userName, password, email } = req.body;
   signupCredentials
@@ -32,17 +34,20 @@ exports.postLoginCredentials = (req, res) => {
     .findOne({
       where: { email: email },
     })
-    .then((result) => {
-      if (result) {
-        bcrypt.compare(password, result.password, (err, result) => {
+    .then((user) => {
+      if (user) {
+        bcrypt.compare(password, user.password, (err, result) => {
           if (err) {
             throw new Error("somthing went wrong");
           }
           if (result) {
-            res.status(201).send(result);
+            res.status(201).send({
+              message: "logged in successfully",
+              token: tokenGenrator(user.id),
+            });
           } else {
             res.status(404).send({
-              body: result,
+              body: user,
               message: "User not authorized",
             });
           }

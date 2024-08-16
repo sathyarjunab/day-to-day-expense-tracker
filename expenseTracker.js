@@ -5,9 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const expenseForm = document.getElementById("expenseForm");
   const expenseList = document.querySelector(".ulist");
 
+  const token = localStorage.getItem("token");
+
   async function fetchExpenses() {
     try {
-      const response = await fetch(apiUrl);
+      const response = await fetch(apiUrl, {
+        headers: { authorization: token },
+      });
       expenses = await response.json();
       renderExpenses();
     } catch (error) {
@@ -52,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         await fetch(apiUrl, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", authorization: token },
           body: JSON.stringify(expenseData),
         });
       }

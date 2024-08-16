@@ -1,12 +1,13 @@
 const express = require("express");
 
+const auth = require("../middleware/auth");
 const controller = require("../controllers/ExpenseController");
 
 const route = express.Router();
 
-route.get("/", controller.getData);
+route.get("/", auth.authenticate, controller.getData);
 
-route.post("/", controller.postData);
+route.post("/", auth.authenticate, controller.postData);
 
 route.get("/:id", controller.getById);
 
