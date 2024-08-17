@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../util/DataBase");
 
-const userCredentials = sequelize.define("userCredentials", {
+const UserCredentials = sequelize.define("userCredentials", {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -20,6 +20,9 @@ const userCredentials = sequelize.define("userCredentials", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  isPremium: {
+    type: Sequelize.BOOLEAN,
+  },
 });
 
-module.exports = userCredentials;
+module.exports = UserCredentials;

@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
 
-const tokenGenrator = require("../util/token");
+const tokenGenrator = require("../util/Token");
 const signupCredentials = require("../model/UserCredentials");
-const token = require("../util/token");
+
 exports.postSignupCredentials = (req, res) => {
   const { userName, password, email } = req.body;
   signupCredentials
@@ -18,6 +18,7 @@ exports.postSignupCredentials = (req, res) => {
             user_Name: userName,
             password: hash,
             email: email,
+            isPremium: false,
           });
           res.status(201).send(response);
         });
@@ -43,7 +44,7 @@ exports.postLoginCredentials = (req, res) => {
           if (result) {
             res.status(201).send({
               message: "logged in successfully",
-              token: tokenGenrator(user.id),
+              token: tokenGenrator(user.id, user.isPremium),
             });
           } else {
             res.status(404).send({

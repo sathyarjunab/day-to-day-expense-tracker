@@ -2,23 +2,30 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
 
-const LoginSignupRoutes = require("./routes/LoginSignupRoutes");
-const ExpenseRoutes = require("./routes/ExpenseRoutes");
+const loginSignupRoutes = require("./routes/LoginSignupRoutes");
+const expenseRoutes = require("./routes/ExpenseRoutes");
+const purchaseRoutes = require("./routes/Purchase");
 const sequelize = require("./util/DataBase");
-const expense = require("./model/expense");
-const userCredentials = require("./model/UserCredentials");
+const Expense = require("./model/Expense");
+const UserCredentials = require("./model/UserCredentials");
+const Order = require("./model/Orders");
 
 const app = express();
+require("dotenv").config();
 
 app.use(bodyParser.json({ extended: false }));
 app.use(cors());
 
-app.use("/expenses", ExpenseRoutes);
-app.use(LoginSignupRoutes);
+app.use("/expenses", expenseRoutes);
+app.use("/expenses/purchase", purchaseRoutes);
+app.use(loginSignupRoutes);
 
-userCredentials.hasMany(expense);
-expense.belongsTo(userCredentials, { constraints: true, onDelete: "CASCADE" });
+UserCredentials.hasMany(Expense);
+Expense.belongsTo(UserCredentials, { constraints: true, onDelete: "CASCADE" });
 
+UserCredentials.hasMany(Order);
+Order.belongsTo(UserCredentials, { constraints: true, onDelete: "CASCADE" });
+// { force: true }
 sequelize.sync().then((result) => {
   app.listen(3000, () => {
     console.log("connected");

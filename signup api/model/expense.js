@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../util/DataBase");
 
-const expense = sequelize.define("expenses", {
+const Expense = sequelize.define("expenses", {
   id: {
     type: Sequelize.INTEGER,
     allowNull: false,
@@ -23,4 +23,4 @@ const expense = sequelize.define("expenses", {
   },
 });
 
-module.exports = expense;
+module.exports = Expense;

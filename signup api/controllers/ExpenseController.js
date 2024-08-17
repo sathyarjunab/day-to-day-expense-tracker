@@ -1,10 +1,10 @@
-const expense = require("../model/expense");
+const Expense = require("../model/Expense");
 
 exports.getData = (req, res) => {
   req.user
     .getExpenses()
     .then((result) => {
-      res.status(200).send(result);
+      res.status(200).send({ res: result, premium: req.user.isPremium });
     })
     .catch((err) => {
       console.log(err);
@@ -28,8 +28,7 @@ exports.postData = (req, res) => {
 
 exports.getById = (req, res) => {
   const id = req.params.id;
-  expense
-    .findByPk(id)
+  Expense.findByPk(id)
     .then((result) => {
       res.status(200).send(result);
     })
@@ -40,8 +39,7 @@ exports.getById = (req, res) => {
 
 exports.updateById = (req, res) => {
   const id = req.params.id;
-  expense
-    .findByPk(id)
+  Expense.findByPk(id)
     .then((result) => {
       result.amount = req.body.amount;
       result.description = req.body.description;
@@ -59,8 +57,7 @@ exports.updateById = (req, res) => {
 
 exports.deleteById = (req, res) => {
   const id = req.params.id;
-  expense
-    .findByPk(id)
+  Expense.findByPk(id)
     .then((res) => {
       res.destroy();
     })
