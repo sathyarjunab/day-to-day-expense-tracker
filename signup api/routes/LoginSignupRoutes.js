@@ -8,4 +8,6 @@ routes.post("/signup", constroller.postSignupCredentials);
 
 routes.post("/login", constroller.postLoginCredentials);
 
+routes.post("/password/forgotpassword", constroller.emailSender);
+
 module.exports = routes;

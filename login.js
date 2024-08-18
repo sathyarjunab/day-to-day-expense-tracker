@@ -1,5 +1,6 @@
 const apiUrl = "http://localhost:3000/";
 const login = document.querySelector(".login");
+const forgetPassword = document.querySelector(".fp");
 
 login.addEventListener("submit", async (event) => {
   try {
@@ -34,4 +35,8 @@ login.addEventListener("submit", async (event) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+forgetPassword.addEventListener("click", (e) => {
+  window.location.href = "/forgotPasswordForm.html";
 });

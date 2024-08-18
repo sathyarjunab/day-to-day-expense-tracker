@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const Sib = require("sib-api-v3-sdk");
 
 const tokenGenrator = require("../util/Token");
 const signupCredentials = require("../model/UserCredentials");
@@ -63,4 +64,25 @@ exports.postLoginCredentials = (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+};
+exports.emailSender = (req, res) => {
+  const defaultClient = Sib.ApiClient.instance;
+  const apiKey = defaultClient.authentications["api-key"];
+  apiKey.apiKey = process.env.SBI_API_KEY;
+  const tranEmailApi = new Sib.TransactionalEmailsApi();
+  const sender = {
+    email: "sathyarjun007@gmail.com",
+  };
+  const receivers = [
+    {
+      email: req.body.Email,
+    },
+  ];
+  tranEmailApi.sendTransacEmail({
+    sender,
+    to: receivers,
+    subject: "recover password",
+    htmlContent: `<h1>here is the link to reset you'r password</h1><a>link</a>`,
+  });
+  res.status(201).send({ message: "email sent" });
 };
