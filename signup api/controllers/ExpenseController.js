@@ -19,6 +19,10 @@ exports.postData = (req, res) => {
       category: req.body.category,
     })
     .then((result) => {
+      let sum = req.user.totalExpenses + Number(req.body.amount);
+      req.user.update({
+        totalExpenses: sum,
+      });
       res.status(201).send(result);
     })
     .catch((err) => {

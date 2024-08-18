@@ -23,6 +23,9 @@ const UserCredentials = sequelize.define("userCredentials", {
   isPremium: {
     type: Sequelize.BOOLEAN,
   },
+  totalExpenses: {
+    type: Sequelize.INTEGER,
+  },
 });
 
 module.exports = UserCredentials;

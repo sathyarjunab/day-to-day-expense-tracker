@@ -19,6 +19,7 @@ exports.postSignupCredentials = (req, res) => {
             password: hash,
             email: email,
             isPremium: false,
+            totalExpenses: 0,
           });
           res.status(201).send(response);
         });

@@ -24,7 +24,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function renderExpenses() {
+    const h1 = document.createElement("h1");
+    h1.innerText = "EXPENSES ";
     expenseList.innerHTML = "";
+    if (expenses.length > 0) {
+      expenseList.append(h1);
+    }
     expenses.forEach((expense) => {
       const li = document.createElement("li");
       li.textContent = `${expense.amount} - ${expense.description} - ${expense.category}`;
