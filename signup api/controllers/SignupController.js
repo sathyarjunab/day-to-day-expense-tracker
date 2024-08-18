@@ -71,7 +71,7 @@ exports.emailSender = (req, res) => {
   apiKey.apiKey = process.env.SBI_API_KEY;
   const tranEmailApi = new Sib.TransactionalEmailsApi();
   const sender = {
-    email: "sathyarjun007@gmail.com",
+    email: "bla998050@gmail.com",
   };
   const receivers = [
     {
