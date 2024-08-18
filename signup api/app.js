@@ -1,7 +1,9 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
+const ForgotPasswordRequest = require("./model/ForgotPasswordRequests");
 const loginSignupRoutes = require("./routes/LoginSignupRoutes");
 const expenseRoutes = require("./routes/ExpenseRoutes");
 const purchaseRoutes = require("./routes/Purchase");
@@ -13,6 +15,8 @@ const Order = require("./model/Orders");
 
 const app = express();
 require("dotenv").config();
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "./", "views"));
 
 app.use(bodyParser.json({ extended: false }));
 app.use(cors());
@@ -27,6 +31,13 @@ Expense.belongsTo(UserCredentials, { constraints: true, onDelete: "CASCADE" });
 
 UserCredentials.hasMany(Order);
 Order.belongsTo(UserCredentials, { constraints: true, onDelete: "CASCADE" });
+
+UserCredentials.hasMany(ForgotPasswordRequest);
+ForgotPasswordRequest.belongsTo(UserCredentials, {
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
 // { force: true }
 sequelize.sync().then((result) => {
   app.listen(3000, () => {
