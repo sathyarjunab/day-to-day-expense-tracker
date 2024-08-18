@@ -101,7 +101,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function deleteExpense(id) {
     try {
-      await fetch(`${apiUrl}/${id}`, { method: "DELETE" });
+      await fetch(`${apiUrl}/${id}`, {
+        method: "DELETE",
+        headers: {
+          authorization: token,
+        },
+      });
       fetchExpenses();
     } catch (error) {
       console.error("Error deleting expense:", error);
@@ -171,9 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
       board.append(header);
       listArray.forEach((eliment) => {
         let list = document.createElement("li");
-        list.innerText = `Name - ${eliment.user_Name} Toatal Expense - ${
-          eliment.total_cost ? eliment.total_cost : 0
-        }`;
+        list.innerText = `Name - ${eliment.user_Name} Toatal Expense - ${eliment.totalExpenses}`;
         board.append(list);
       });
     } catch (err) {

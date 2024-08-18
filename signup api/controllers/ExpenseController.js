@@ -1,4 +1,5 @@
 const Expense = require("../model/Expense");
+const sequelize = require("../util/DataBase");
 
 exports.getData = (req, res) => {
   req.user
@@ -11,23 +12,43 @@ exports.getData = (req, res) => {
     });
 };
 
-exports.postData = (req, res) => {
-  req.user
-    .createExpense({
-      amount: req.body.amount,
-      description: req.body.description,
-      category: req.body.category,
-    })
-    .then((result) => {
-      let sum = req.user.totalExpenses + Number(req.body.amount);
-      req.user.update({
-        totalExpenses: sum,
+exports.postData = async (req, res) => {
+  try {
+    const t = await sequelize.transaction();
+    req.user
+      .createExpense(
+        {
+          amount: req.body.amount,
+          description: req.body.description,
+          category: req.body.category,
+        },
+        {
+          transaction: t,
+        }
+      )
+      .then((result) => {
+        let sum = req.user.totalExpenses + Number(req.body.amount);
+        req.user
+          .update(
+            {
+              totalExpenses: sum,
+            },
+            {
+              transaction: t,
+            }
+          )
+          .then(async () => {
+            await t.commit();
+            res.status(201).send(result);
+          });
+      })
+      .catch(async (err) => {
+        await t.rollback();
+        throw new Error(err);
       });
-      res.status(201).send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.getById = (req, res) => {
@@ -59,17 +80,24 @@ exports.updateById = (req, res) => {
     });
 };
 
-exports.deleteById = (req, res) => {
-  const id = req.params.id;
-  Expense.findByPk(id)
-    .then((res) => {
-      res.destroy();
-    })
-    .then((result) => {
-      console.log("deleted");
-      res.status(200).send("deleted");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+exports.deleteById = async (req, res) => {
+  try {
+    const t = await sequelize.transaction();
+    const id = req.params.id;
+    let Exp = await Expense.findByPk(id);
+    let sum = req.user.totalExpenses - Number(Exp.amount);
+    let updatedUser = await req.user.update(
+      {
+        totalExpenses: sum,
+      },
+      { transaction: t }
+    );
+    Exp.destroy();
+    console.log("deleted");
+    await t.commit();
+    res.status(200).send("deleted");
+  } catch (err) {
+    await t.rollback();
+    console.log(err);
+  }
 };

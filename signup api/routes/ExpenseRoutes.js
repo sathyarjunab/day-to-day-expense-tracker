@@ -13,6 +13,6 @@ route.get("/:id", controller.getById);
 
 route.put("/:id", controller.updateById);
 
-route.delete("/:id", controller.deleteById);
+route.delete("/:id", auth.authenticate, controller.deleteById);
 
 module.exports = route;
