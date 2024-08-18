@@ -40,7 +40,9 @@ document.addEventListener("DOMContentLoaded", function () {
       expenseList.appendChild(li);
     });
     if (ispremium) {
-      pre.innerHTML = "you are a premium user";
+      pre.innerHTML = `you are a premium user <button type="SHOW LEADER BOARD" class="leaderboardbtn">SHOW LEADER BOARD</button>`;
+      const leaderBoardbtn = document.querySelector(".leaderboardbtn");
+      leaderBoardbtn.addEventListener("click", scoreBoard);
     } else {
       pre.innerHTML = `<button type="submit" class="buy">BUY PREMIUM</button>`;
       console.log(pre);
@@ -116,7 +118,6 @@ document.addEventListener("DOMContentLoaded", function () {
         key: res.key_id,
         order_id: res.order.id,
         handler: async function (result) {
-          console.log(result);
           const response = await fetch(
             `${apiUrl + "/purchase/updatetransactionstatus"}`,
             {
@@ -131,8 +132,10 @@ document.addEventListener("DOMContentLoaded", function () {
               }),
             }
           );
+          responseObject = await response.json();
+          localStorage.setItem("token", responseObject.token);
           alert("you are a premium user now");
-          renderExpenses();
+          fetchExpenses();
         },
       };
       const rzp1 = new Razorpay(options);
@@ -141,6 +144,32 @@ document.addEventListener("DOMContentLoaded", function () {
       rzp1.on("payment.failed", function (result) {
         console.log(result);
         alert("Somthing went wrong");
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function scoreBoard(e) {
+    try {
+      const board = document.querySelector(".leaderboard");
+      board.innerHTML = "";
+      const list = await fetch(`${apiUrl + "/premium/showLeaderBoard"}`, {
+        headers: {
+          authorization: token,
+        },
+      });
+      const listArray = await list.json();
+      console.log(listArray);
+      let header = document.createElement("h1");
+      header.innerText = "LEADER BOARD";
+      board.append(header);
+      listArray.forEach((eliment) => {
+        let list = document.createElement("li");
+        list.innerText = `Name - ${eliment.user_Name} Toatal Expense - ${
+          eliment.total_cost ? eliment.total_cost : 0
+        }`;
+        board.append(list);
       });
     } catch (err) {
       console.log(err);

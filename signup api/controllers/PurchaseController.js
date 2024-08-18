@@ -1,4 +1,6 @@
 const razorpay = require("razorpay");
+
+const tokenGenrator = require("../util/Token");
 const Order = require("../model/Orders");
 
 exports.purchasePremium = async (req, res) => {
@@ -34,9 +36,11 @@ exports.updatePremiumUser = (req, res) => {
           .update({ paymentId: payment_id, status: "SUCCESSFUL" })
           .then(() => {
             req.user.update({ isPremium: true }).then(() => {
-              return res
-                .status(202)
-                .json({ success: true, message: "Transaction Successful" });
+              return res.status(202).json({
+                success: true,
+                message: "Transaction Successful",
+                token: tokenGenrator(req.user.id, true),
+              });
             });
           })
           .catch((err) => {

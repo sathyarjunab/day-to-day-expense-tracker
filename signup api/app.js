@@ -5,6 +5,7 @@ const cors = require("cors");
 const loginSignupRoutes = require("./routes/LoginSignupRoutes");
 const expenseRoutes = require("./routes/ExpenseRoutes");
 const purchaseRoutes = require("./routes/Purchase");
+const premium = require("./routes/PremiumRoutes");
 const sequelize = require("./util/DataBase");
 const Expense = require("./model/Expense");
 const UserCredentials = require("./model/UserCredentials");
@@ -19,6 +20,7 @@ app.use(cors());
 app.use("/expenses", expenseRoutes);
 app.use("/expenses/purchase", purchaseRoutes);
 app.use(loginSignupRoutes);
+app.use("/expenses/premium", premium);
 
 UserCredentials.hasMany(Expense);
 Expense.belongsTo(UserCredentials, { constraints: true, onDelete: "CASCADE" });

@@ -55,7 +55,6 @@ exports.postLoginCredentials = (req, res) => {
         });
       } else {
         res.status(404).send({
-          body: result,
           message: "User not found",
         });
       }
