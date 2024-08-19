@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let ispremium;
   const expenseForm = document.getElementById("expenseForm");
   const expenseList = document.querySelector(".ulist");
+  const expensetabel = document.querySelector(".expensetabel");
 
   const pre = document.querySelector(".premium");
 
@@ -48,6 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
       pre.innerHTML = `you are a premium user <button type="SHOW LEADER BOARD" class="leaderboardbtn">SHOW LEADER BOARD</button>`;
       const leaderBoardbtn = document.querySelector(".leaderboardbtn");
       leaderBoardbtn.addEventListener("click", scoreBoard);
+      function redirector(e) {
+        window.location.href = "/expenseDocument.html";
+      }
+      expensetabel.addEventListener("click", redirector);
     } else {
       pre.innerHTML = `<button type="submit" class="buy">BUY PREMIUM</button>`;
       console.log(pre);
@@ -183,7 +188,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log(err);
     }
   }
-
   expenseForm.addEventListener("submit", addOrUpdateExpense);
   fetchExpenses();
 });

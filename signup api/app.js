@@ -3,15 +3,16 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 
-const ForgotPasswordRequest = require("./model/ForgotPasswordRequests");
 const loginSignupRoutes = require("./routes/LoginSignupRoutes");
 const expenseRoutes = require("./routes/ExpenseRoutes");
 const purchaseRoutes = require("./routes/Purchase");
 const premium = require("./routes/PremiumRoutes");
 const sequelize = require("./util/DataBase");
+const ForgotPasswordRequest = require("./model/ForgotPasswordRequests");
 const Expense = require("./model/Expense");
 const UserCredentials = require("./model/UserCredentials");
 const Order = require("./model/Orders");
+const downloadUrl = require("./model/downloadUrl");
 
 const app = express();
 require("dotenv").config();
@@ -35,6 +36,12 @@ Order.belongsTo(UserCredentials, { constraints: true, onDelete: "CASCADE" });
 
 UserCredentials.hasMany(ForgotPasswordRequest);
 ForgotPasswordRequest.belongsTo(UserCredentials, {
+  constraints: true,
+  onDelete: "CASCADE",
+});
+
+UserCredentials.hasMany(downloadUrl);
+downloadUrl.belongsTo(UserCredentials, {
   constraints: true,
   onDelete: "CASCADE",
 });
