@@ -1,0 +1,170 @@
+/* General styles for all pages */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+h1,
+h2 {
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+label {
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #007bff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+a button {
+  background-color: #28a745;
+}
+
+a button:hover {
+  background-color: #218838;
+}
+
+/* Specific styles for the expense tracker page */
+.filter {
+  margin-bottom: 20px;
+}
+
+.filter label {
+  margin-right: 10px;
+}
+
+.summary {
+  margin-bottom: 20px;
+}
+
+.summary p {
+  margin: 5px 0;
+}
+
+.expense-list {
+  margin-top: 20px;
+}
+
+#expenseList {
+  list-style: none;
+  padding: 0;
+}
+
+#expenseList li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Specific styles for the forgot password page */
+.forgotPasswordForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.forgotPasswordForm label {
+  margin-bottom: 10px;
+}
+
+/* Specific styles for the login page */
+.login {
+  display: flex;
+  flex-direction: column;
+}
+
+.errorList {
+  color: red;
+  list-style: none;
+  padding: 0;
+}
+
+.fp {
+  margin-top: 10px;
+  background-color: #ffc107;
+}
+
+.fp:hover {
+  background-color: #e0a800;
+}
+
+/* Specific styles for the signup page */
+.Signup {
+  display: flex;
+  flex-direction: column;
+}
+
+.Signup label {
+  margin-bottom: 10px;
+}
+
+.Signup a button {
+  background-color: #007bff;
+}
+
+.Signup a button:hover {
+  background-color: #0056b3;
+}
+
+/* Common styles for additional elements */
+.info,
+.premium,
+.leaderboard {
+  margin: 20px;
+}
+/* Additional styles for the month selector */
+.hidden {
+  display: none;
+}
+
+#monthSelector {
+  margin-bottom: 20px;
+}
+
+#month {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

@@ -18,6 +18,7 @@ require("dotenv").config();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "./", "views"));
 
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: false }));
 app.use(cors());
 

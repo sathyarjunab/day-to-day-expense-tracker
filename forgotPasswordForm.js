@@ -11,5 +11,9 @@ form.addEventListener("submit", async (e) => {
     },
     body: JSON.stringify({ Email: email }),
   });
-  console.log(res);
+  const info = document.querySelector(".info");
+  const para = document.createElement("p");
+  para.innerText = "check your email for the reset link";
+  info.append(para);
+  form.reset();
 });

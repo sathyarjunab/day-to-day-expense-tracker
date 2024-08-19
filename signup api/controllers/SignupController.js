@@ -70,6 +70,12 @@ exports.postLoginCredentials = (req, res) => {
 };
 exports.emailSender = async (req, res) => {
   try {
+    const emailFromForm = req.body.Email;
+    const user = await UserCredentials.findOne({
+      where: {
+        email: emailFromForm,
+      },
+    });
     const defaultClient = Sib.ApiClient.instance;
     const apiKey = defaultClient.authentications["api-key"];
     apiKey.apiKey = process.env.SBI_API_KEY;
@@ -79,10 +85,10 @@ exports.emailSender = async (req, res) => {
     };
     const receivers = [
       {
-        email: req.body.Email,
+        email: emailFromForm,
       },
     ];
-    const resetTabel = await ForgotPasswordRequest.create({
+    const resetTabel = await user.createForgotPasswordRequest({
       uuid: UUID(),
       isactive: true,
     });
@@ -127,11 +133,13 @@ exports.changesInTabel = async (req, res) => {
     });
     if (userPassword) {
       await userPassword.update({ isactive: false });
-      const user = await UserCredentials.findByPk(userPassword.id);
+      const user = await UserCredentials.findByPk(
+        userPassword.userCredentialId
+      );
       bcrypt.hash(password, 10, async (err, hash) => {
         await user.update({ password: hash });
+        res.status(201).send("done and dusted");
       });
-      res.status(201).send("done and dusted");
     } else {
       throw new Error("TIME OUT");
     }

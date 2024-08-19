@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Expense Tracker</h1>
+
+      <div class="filter">
+        <label for="filterType">Filter by:</label>
+        <select id="filterType">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+
+        <!-- Month selector, initially hidden -->
+        <div id="monthSelector" class="hidden">
+          <label for="month">Select Month:</label>
+          <select id="month">
+            <!-- Options will be populated by JavaScript -->
+          </select>
+        </div>
+      </div>
+
+      <div class="summary">
+        <h2>Summary</h2>
+        <p>Total Income: <span id="totalIncome">$0.00</span></p>
+        <p>Total Expense: <span id="totalExpense">$0.00</span></p>
+      </div>
+
+      <div class="expense-list">
+        <h2>Expenses and Incomes</h2>
+        <ul id="expenseList">
+          <!-- List of expenses and incomes will be populated here -->
+        </ul>
+      </div>
+    </div>
+
+    <script src="./expenseDocument.js"></script>
+  </body>
+</html>
