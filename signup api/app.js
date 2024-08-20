@@ -2,6 +2,10 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const helmet = require("helmet");
+const compression = require("compression");
+const morgan = require("morgan");
+const fs = require("fs");
 
 const loginSignupRoutes = require("./routes/LoginSignupRoutes");
 const expenseRoutes = require("./routes/ExpenseRoutes");
@@ -15,13 +19,20 @@ const Order = require("./model/Orders");
 const downloadUrl = require("./model/downloadUrl");
 
 const app = express();
-require("dotenv").config();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "./", "views"));
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: false }));
 app.use(cors());
+app.use(helmet());
+app.use(compression());
+app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use("/expenses", expenseRoutes);
 app.use("/expenses/purchase", purchaseRoutes);
