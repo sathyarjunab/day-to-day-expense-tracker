@@ -1,15 +1,28 @@
 const Expense = require("../model/Expense");
 const sequelize = require("../util/DataBase");
 
-exports.getData = (req, res) => {
-  req.user
-    .getExpenses()
-    .then((result) => {
-      res.status(200).send({ res: result, premium: req.user.isPremium });
-    })
-    .catch((err) => {
-      console.log(err);
+exports.getData = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 5;
+  const offset = (page - 1) * limit;
+
+  try {
+    const totalItems = await req.user.countExpenses();
+    const result = await req.user.getExpenses({
+      offset: offset,
+      limit: limit,
     });
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.status(200).send({
+      res: result,
+      premium: req.user.isPremium,
+      totalPages: totalPages,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error");
+  }
 };
 
 exports.postData = async (req, res) => {

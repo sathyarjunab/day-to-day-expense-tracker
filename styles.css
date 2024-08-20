@@ -168,3 +168,12 @@ a button:hover {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+button.active {
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 0 10px 2px black;
+}

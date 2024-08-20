@@ -2,23 +2,42 @@ document.addEventListener("DOMContentLoaded", function () {
   const apiUrl = "http://localhost:3000/expenses";
   let expenses = [];
   let ispremium;
+  let currentPage = 1;
+  // const itemsPerPage =1;
   const expenseForm = document.getElementById("expenseForm");
   const expenseList = document.querySelector(".ulist");
-  const expensetabel = document.querySelector(".expensetabel");
-
+  const paginationControls = document.querySelector(".pagination");
   const pre = document.querySelector(".premium");
+  const itemsPerPageSelect = document.querySelector("#itemsPerPageSelect");
 
   const token = localStorage.getItem("token");
+  let totalP = 0;
 
-  async function fetchExpenses() {
+  itemsPerPageSelect.addEventListener("change", (e) => {
+    const limit = parseInt(itemsPerPageSelect.value);
+    localStorage.setItem("limit", limit);
+    fetchExpenses();
+  });
+
+  async function fetchExpenses(page = 1) {
     try {
-      const response = await fetch(apiUrl, {
-        headers: { authorization: token },
-      });
-      const { res, premium } = await response.json();
+      let itemsPerPage = localStorage.getItem("limit")
+        ? localStorage.getItem("limit")
+        : 1;
+      const response = await fetch(
+        `${apiUrl}?page=${page}&limit=${itemsPerPage}`,
+        {
+          headers: { authorization: token },
+        }
+      );
+      const { res, premium, totalPages } = await response.json();
+      totalP = totalPages;
       expenses = res;
       ispremium = premium;
+      currentPage = page;
+
       renderExpenses();
+      renderPagination();
     } catch (error) {
       console.error("Error fetching expenses:", error);
     }
@@ -26,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function renderExpenses() {
     const h1 = document.createElement("h1");
-    h1.innerText = "EXPENSES ";
+    h1.innerText = "EXPENSES";
     expenseList.innerHTML = "";
     if (expenses.length > 0) {
       expenseList.append(h1);
@@ -49,15 +68,51 @@ document.addEventListener("DOMContentLoaded", function () {
       pre.innerHTML = `you are a premium user <button type="SHOW LEADER BOARD" class="leaderboardbtn">SHOW LEADER BOARD</button>`;
       const leaderBoardbtn = document.querySelector(".leaderboardbtn");
       leaderBoardbtn.addEventListener("click", scoreBoard);
-      function redirector(e) {
-        window.location.href = "/expenseDocument.html";
-      }
-      expensetabel.addEventListener("click", redirector);
     } else {
       pre.innerHTML = `<button type="submit" class="buy">BUY PREMIUM</button>`;
-      console.log(pre);
       const buy = document.querySelector(".buy");
       buy.addEventListener("click", razorPay);
+    }
+  }
+
+  function renderPagination() {
+    paginationControls.innerHTML = ""; // Clear existing buttons
+
+    let startPage = Math.max(1, currentPage - 1);
+    let endPage = Math.min(totalP, startPage + 2);
+
+    // Adjust startPage if we're at the end of the range
+    if (endPage - startPage < 3) {
+      startPage = Math.max(1, endPage - 3);
+    }
+
+    // Previous Button
+    if (currentPage > 1) {
+      const prevButton = document.createElement("button");
+      prevButton.textContent = "Prev";
+      prevButton.addEventListener("click", () =>
+        fetchExpenses(currentPage - 1)
+      );
+      paginationControls.appendChild(prevButton);
+    }
+
+    // Page Number Buttons
+    for (let i = startPage; i <= endPage; i++) {
+      const pageButton = document.createElement("button");
+      pageButton.textContent = i;
+      pageButton.className = i === currentPage ? "active" : "";
+      pageButton.addEventListener("click", () => fetchExpenses(i));
+      paginationControls.appendChild(pageButton);
+    }
+
+    // Next Button
+    if (currentPage < totalP) {
+      const nextButton = document.createElement("button");
+      nextButton.textContent = "Next";
+      nextButton.addEventListener("click", () =>
+        fetchExpenses(currentPage + 1)
+      );
+      paginationControls.appendChild(nextButton);
     }
   }
 

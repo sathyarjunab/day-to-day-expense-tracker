@@ -10,14 +10,13 @@
     <form id="expenseForm">
       <label for="amount">Choose Expense Amount:</label>
       <input type="text" name="amount" id="amount" />
-      <label for="amount">Choose description</label>
+      <label for="description">Choose description:</label>
       <input type="text" name="description" id="description" />
       <label for="category">Choose a category:</label>
       <select name="category" id="category">
         <option value="fuel">Fuel</option>
         <option value="food">Food</option>
         <option value="electricity">Electricity</option>
-        a
         <option value="movie">Movie</option>
       </select>
       <button type="submit">Add Expense</button>
@@ -26,7 +25,14 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <ul class="ulist"></ul>
     <div class="leaderboard"></div>
-    <button class="expensetabel">Expense Tabel</button>
+    <div class="pagination"></div>
+    <br></br>
+    <label for="itemsPerPageSelect">Items per page:</label>
+    <select id="itemsPerPageSelect">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
   </body>
   <script src="./expenseTracker.js"></script>
 </html>
